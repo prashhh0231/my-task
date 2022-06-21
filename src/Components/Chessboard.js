@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import "../Styles/chessboard.css";
+import { useDispatch, useSelector } from "react-redux";
+import { tileClick } from "../state/action/action";
 
 const Chessboard = () => {
+  const position = useSelector((state) => state.changeposition);
+  const dispatch = useDispatch();
   const [chess, setChess] = useState([]);
 
   const black = {
@@ -19,7 +22,6 @@ const Chessboard = () => {
     display: "flex",
     flexWrap: "wrap",
     marginTop: "20px",
-    boxShadow: `0px 10px 10px rgba(0,0,0,0.1)`,
     border: "1px solid black",
   };
 
@@ -29,19 +31,7 @@ const Chessboard = () => {
     backgroundColor: "red",
   };
 
-  const [position, setPosition] = useState({
-    i: null,
-    j: null,
-  });
-
-  const update = (i, j) => {
-    setPosition({
-      i: i,
-      j: j,
-    });
-  };
-
-  const makeChessBoard = () => {
+  const makeBoard = () => {
     let arr = [];
 
     for (let i = 0; i < 8; i++) {
@@ -52,7 +42,7 @@ const Chessboard = () => {
             <div
               style={position.i === i && position.j === j ? red : white}
               onClick={() => {
-                update(i, j);
+                dispatch(tileClick(i, j));
               }}
             ></div>
           );
@@ -61,7 +51,7 @@ const Chessboard = () => {
             <div
               style={position.i === i && position.j === j ? red : black}
               onClick={() => {
-                update(i, j);
+                dispatch(tileClick(i, j));
               }}
             ></div>
           );
@@ -73,7 +63,7 @@ const Chessboard = () => {
   };
 
   useEffect(() => {
-    makeChessBoard();
+    makeBoard();
   });
   return (
     <div className="chess">
